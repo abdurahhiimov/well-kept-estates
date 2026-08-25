@@ -20,9 +20,22 @@ import { LiquidGlass } from "@/components/motion/glass";
  * own) means tiles and markers come out of the same Web Mercator projection,
  * so a pin lands on its town by construction.
  *
- * The tile layer is a fixed pixel size centred in its container, never scaled:
- * scaling would blur the tiles and break the 1:1 relationship between
- * projected pixels and screen pixels that keeps the markers honest.
+ * The tile layer is a fixed pixel size centred in its container. On a wide
+ * screen it is shown 1:1. Narrower than that, the whole layer — tiles AND
+ * markers together, inside one wrapper — is scaled down by `--map-scale`, so
+ * a pin still lands on its town: both are in the same coordinate space and
+ * the same transform applies to both. Without this the container simply
+ * cropped the middle of a 2048px layer and the outer towns (Thousand Oaks on
+ * one end, Studio City on the other) fell off the edges entirely.
+ *
+ * The tiles are @2x, so they survive being scaled down — at 0.46 they are
+ * still supersampled rather than blurred.
+ *
+ * The name pills do NOT survive it: scaled with the layer they become
+ * illegible, and counter-scaling them back up makes neighbours overlap, since
+ * the towns sit ~150px apart and a pill is wider than that. So below `lg` the
+ * pins carry the geography on their own and the town list underneath the map
+ * does the naming.
  */
 
 const ZOOM = 11;
@@ -69,35 +82,32 @@ const LEADER = 58;
 
 export function ValleyMap() {
   return (
-    <div className="relative aspect-[4/5] w-full overflow-hidden sm:aspect-[16/10] lg:aspect-[2.6/1]">
+    <div className="valley-map relative aspect-[3/2] w-full overflow-hidden sm:aspect-[16/10] lg:aspect-[2.6/1]">
+      {/* One wrapper, one transform — tiles and pins scale together, so the
+          projection stays honest at every width. */}
       <div
-        aria-hidden
-        className="map-tint absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
-        style={{ width: LAYER.w, height: LAYER.h }}
+        className="absolute left-1/2 top-1/2 origin-center"
+        style={{
+          width: LAYER.w,
+          height: LAYER.h,
+          transform: "translate(-50%, -50%) scale(var(--map-scale, 1))",
+        }}
       >
-        {tiles.map((t) => (
-          <img
-            key={`${t.x}-${t.y}`}
-            src={`https://basemaps.cartocdn.com/dark_nolabels/${ZOOM}/${t.x}/${t.y}@2x.png`}
-            alt=""
-            loading="lazy"
-            width={TILE}
-            height={TILE}
-            className="absolute max-w-none"
-            style={{ left: t.x * TILE - originX, top: t.y * TILE - originY }}
-          />
-        ))}
-      </div>
+        <div aria-hidden className="map-tint absolute inset-0">
+          {tiles.map((t) => (
+            <img
+              key={`${t.x}-${t.y}`}
+              src={`https://basemaps.cartocdn.com/dark_nolabels/${ZOOM}/${t.x}/${t.y}@2x.png`}
+              alt=""
+              loading="lazy"
+              width={TILE}
+              height={TILE}
+              className="absolute max-w-none"
+              style={{ left: t.x * TILE - originX, top: t.y * TILE - originY }}
+            />
+          ))}
+        </div>
 
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-0 bg-gradient-to-b from-night/35 via-transparent to-night/55"
-      />
-
-      <div
-        className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
-        style={{ width: LAYER.w, height: LAYER.h }}
-      >
         <Stagger gap={0.07} className="absolute inset-0">
           {cities.map((c, i) => {
             const above = i % 2 === 0;
@@ -109,25 +119,28 @@ export function ValleyMap() {
               >
                 <StaggerItem>
                   <div className="relative">
-                    {/* The dot marks the town; everything else hangs off it. */}
+                    {/* The dot marks the town; everything else hangs off it.
+                        Scaled down on small screens, the dots would shrink to
+                        nothing, so they grow back as the scale falls. */}
                     <span
                       className={
                         "absolute -translate-x-1/2 -translate-y-1/2 rounded-full " +
                         (c.core
-                          ? "size-2 bg-stamp shadow-[0_0_12px_3px_hsl(var(--stamp)/0.75)]"
-                          : "size-1.5 bg-foreground/55")
+                          ? "size-4 bg-stamp shadow-[0_0_22px_6px_hsl(var(--stamp)/0.75)] lg:size-2 lg:shadow-[0_0_12px_3px_hsl(var(--stamp)/0.75)]"
+                          : "size-3 bg-foreground/55 lg:size-1.5")
                       }
                     />
+                    {/* Leader + name pill: legible only at full scale. */}
                     <span
                       aria-hidden
-                      className="absolute left-0 w-px bg-foreground/25"
+                      className="absolute left-0 hidden w-px bg-foreground/25 lg:block"
                       style={{
                         height: LEADER - 16,
                         top: above ? -(LEADER - 16) : 0,
                       }}
                     />
                     <span
-                      className="absolute -translate-x-1/2"
+                      className="absolute hidden -translate-x-1/2 lg:block"
                       style={{ top: above ? -LEADER : LEADER, left: 0 }}
                     >
                       <LiquidGlass
@@ -151,6 +164,11 @@ export function ValleyMap() {
           })}
         </Stagger>
       </div>
+
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 bg-gradient-to-b from-night/35 via-transparent to-night/55"
+      />
     </div>
   );
 }

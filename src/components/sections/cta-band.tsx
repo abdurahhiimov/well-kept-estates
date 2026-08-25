@@ -23,10 +23,14 @@ export function CtaBand() {
         <Reveal y={18}>
           <div className="max-w-3xl">
             <p className="label-mono">The first step</p>
-            <h2 className="display-lg mt-7 text-foreground">Ready when you are.</h2>
+            <h2 className="display-lg mt-7 text-foreground">
+              You don&apos;t have to figure this out alone.
+            </h2>
             <p className="lead mt-7 max-w-xl">
-              It starts with a free walkthrough — I come see the house, we talk
-              it through, and you decide from there. No fee, no obligation.
+              If you&apos;re standing in a house full of belongings and
+              don&apos;t know where to start, start with a conversation. I come
+              walk through it with you, answer your questions, and tell you
+              honestly what I think makes sense. No fee, no obligation.
             </p>
 
             <div className="mt-12 flex flex-col items-start gap-5 sm:flex-row sm:items-center">

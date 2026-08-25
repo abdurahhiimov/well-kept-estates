@@ -50,10 +50,10 @@ export function Hero() {
 
         <Reveal delay={0.5} immediate className="mt-9 max-w-xl">
           <p className="lead">
-            Well Kept Estates runs estate sales across the Valley — sorting,
-            pricing, staging, and running the sale itself, so a family
-            doesn&apos;t have to. You don&apos;t lift a finger, and you get a
-            written record of where everything went.
+            A house full of a lifetime&apos;s belongings, and no idea where to
+            start. I take the whole job — sorting, pricing, staging, and running
+            the sale itself — and hand you a written record of where every piece
+            went.
           </p>
         </Reveal>
 

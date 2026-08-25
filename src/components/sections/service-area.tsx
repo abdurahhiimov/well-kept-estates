@@ -45,11 +45,13 @@ export function ServiceArea() {
           <RuleDraw />
           <div className="grid grid-cols-[7.5rem_1fr] items-baseline gap-4 border-b border-border py-3.5">
             <span className="label-mono">Core area</span>
-            <span className="text-foreground">{serviceArea.core.join(" · ")}</span>
+            <span className="min-w-0 break-words text-foreground">
+              {serviceArea.core.join(" · ")}
+            </span>
           </div>
           <div className="grid grid-cols-[7.5rem_1fr] items-baseline gap-4 border-b border-border py-3.5">
             <span className="label-mono">Also serving</span>
-            <span className="text-foreground/80">
+            <span className="min-w-0 break-words text-foreground/80">
               {serviceArea.extended.join(" · ")}
             </span>
           </div>

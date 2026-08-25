@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import { Reveal } from "@/components/motion/reveal";
 import { RuleDraw, SectionLabel } from "@/components/motion/rule";
 import { faqs } from "@/lib/content";
@@ -69,22 +69,31 @@ export function Faq() {
                     </button>
                   </h3>
 
-                  <AnimatePresence initial={false}>
-                    {isOpen && (
-                      <motion.div
-                        id={`faq-answer-${i}`}
-                        initial={reduced ? false : { height: 0, opacity: 0 }}
-                        animate={{ height: "auto", opacity: 1 }}
-                        exit={reduced ? undefined : { height: 0, opacity: 0 }}
-                        transition={{ duration: 0.32, ease: [0.22, 1, 0.36, 1] }}
-                        className="overflow-hidden"
-                      >
-                        <p className="max-w-2xl pb-6 pl-[3.1rem] leading-relaxed text-muted-foreground">
-                          {item.a}
-                        </p>
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
+                  {/*
+                    Mounted whether or not it is open — only the height is
+                    animated. Unmounting the closed answers (the old
+                    `AnimatePresence` + `isOpen &&`) left just one of the
+                    sixteen in the rendered DOM, which is the opposite of what
+                    this section is for. `aria-hidden` still tracks the open
+                    state, so a screen reader is told what is collapsed even
+                    though the text is present for anything reading the markup.
+                  */}
+                  <motion.div
+                    id={`faq-answer-${i}`}
+                    initial={false}
+                    animate={{ height: isOpen ? "auto" : 0, opacity: isOpen ? 1 : 0 }}
+                    transition={
+                      reduced
+                        ? { duration: 0 }
+                        : { duration: 0.32, ease: [0.22, 1, 0.36, 1] }
+                    }
+                    aria-hidden={!isOpen}
+                    className="overflow-hidden"
+                  >
+                    <p className="max-w-2xl pb-6 pl-[3.1rem] leading-relaxed text-muted-foreground">
+                      {item.a}
+                    </p>
+                  </motion.div>
                 </li>
               );
             })}

@@ -14,6 +14,10 @@
 export const business = {
   name: "Well Kept Estates",
   tagline: "Estate sales in the San Fernando Valley.",
+  /** Footer line — the two-meaning name, said once, not explained. */
+  motto: "What was well kept deserves to be well handled.",
+  /** The five-step chain, for the footer. */
+  processChain: "Sorting · Pricing · Staging · Selling · Settlement",
 };
 
 export const contact = {
@@ -114,67 +118,67 @@ export const sampleLedger = {
 export const faqs = [
   {
     q: "What does an estate sale company charge?",
-    a: "Most estate sale companies in Los Angeles charge between 30% and 50% of gross sales. Well Kept Estates charges 30% of gross with a $1,500 minimum. There is no setup fee and nothing is paid up front — the commission comes out of what the sale brings in, and if the sale brings in nothing, you owe nothing beyond the minimum agreed in writing.",
+    a: "Most estate sale companies in Los Angeles charge between 30% and 50% of gross sales. I charge 30% of gross with a $1,500 minimum. There is no setup fee and you pay nothing up front — my commission comes out of what the sale brings in, and if the sale brings in nothing, you owe nothing beyond the minimum we agreed to in writing.",
   },
   {
     q: "How long does an estate sale take from start to finish?",
-    a: "Two to three weeks in most homes. Day one is a free walkthrough. The first week covers the agreement and the start of sorting and pricing. The second week is research and staging. The sale itself runs over a weekend, and you get your settlement report and your proceeds the day it closes.",
+    a: "Two to three weeks in most homes. Day one is a free walkthrough. The first week covers the agreement and the start of sorting and pricing. The second week is research and staging. The sale runs over a weekend, and I hand you your settlement report and your proceeds the day it closes. If the house is larger or more tangled than usual, I'll tell you that up front rather than after we've started.",
   },
   {
     q: "Do I have to be there during the estate sale?",
-    a: "No. Most families choose not to be, and that is usually the easier choice — it is hard to watch strangers handle a parent's belongings. You are welcome to be there if you would rather. Either way you get the same written record of what sold.",
+    a: "No. Most families choose not to be, and that's usually the easier choice — it's hard to watch strangers handle a parent's belongings. You're welcome to be there if you'd rather. Either way you get the same written record of what sold.",
   },
   {
     q: "How do I know what actually sold and for how much?",
-    a: "You get a settlement report at the close of the sale. Notable pieces are listed line by line with what they brought and the time they sold; everyday goods are totalled by the lot; every donation is backed by a receipt. The total on the report is the total that gets counted out to you, so the two always reconcile.",
+    a: "You get a settlement report when the sale closes. I list notable pieces line by line with what they brought and the time they sold, total everyday goods by the lot, and back every donation with a receipt. The total on the report is the total I count out to you, so the two always reconcile.",
   },
   {
     q: "What happens to whatever doesn't sell?",
-    a: "Nothing gets thrown out without you knowing. What is left over is donated through a partner charity, with receipts you can use on the estate's return, or hauled away — whichever you prefer, on your timeline. That pickup is arranged for you and billed by the hauler at their price. It is never marked up and no commission is taken on it.",
+    a: "Nothing gets thrown out without you knowing. We decide together on the next step: donation through a partner charity, with receipts you can use on the estate's return, or haul-away — whichever you prefer, on your timeline. I arrange the pickup and the hauler bills you directly at their price. I never mark it up and I take no commission on it.",
   },
   {
     q: "Do you do the cleanout too?",
-    a: "No, and that is deliberate. Well Kept Estates runs the sale — pricing, staging, sale days, and the settlement report. Cleanout is a different job done well by different people, so it gets arranged for you and billed separately rather than bundled into a rate that hides what you are paying for.",
+    a: "No, and that's deliberate. I run the sale — pricing, staging, sale days, and the settlement report. Cleanout is a different job done well by different people, so I arrange it for you and they bill you separately, rather than bundling it into a rate that hides what you're paying for.",
   },
   {
     q: "What is the difference between an estate sale and an estate liquidation?",
-    a: "In practice the terms are used interchangeably. Where people do draw a line: an estate sale is usually run in the home over a weekend and open to the public, while a liquidation can also mean a buyout, an auction, or a consignment arrangement. Well Kept Estates runs sales in the home.",
+    a: "In practice the terms are used interchangeably. Where people do draw a line: an estate sale is usually run in the home over a weekend and open to the public, while a liquidation can also mean a buyout, an auction, or a consignment arrangement. I run sales in the home.",
   },
   {
     q: "Will you buy the contents of the house outright?",
-    a: "No. A buyout is a single price paid before anyone knows what the contents are worth, and the buyer keeps the upside. Working on commission means the only way the fee grows is if your proceeds grow first.",
+    a: "No. A buyout is a single price paid before anyone knows what the contents are worth, and the buyer keeps the upside. I work on consignment instead, which means the only way my fee grows is if your proceeds grow first.",
   },
   {
     q: "Do I need to clean or sort anything before you come?",
-    a: "No. Do not throw anything away and do not tidy up — full drawers and untouched closets are where the value usually hides, and more than one valuable piece has gone out in a bag before the sale was ever priced. Sorting is the job, not the preparation for it.",
+    a: "No — please don't. Don't throw anything away and don't tidy up. Full drawers and untouched closets are where the value usually hides, and plenty of valuable pieces have gone out in a donation bag before anyone priced them. Let me see the house as it is. Sorting is the job, not the preparation for it.",
   },
   {
     q: "What if some things are staying in the family?",
-    a: "Anything set aside for family gets held, not sold. The walkthrough on day one is where you point those things out, and they are recorded before pricing starts so nothing depends on anyone's memory later.",
+    a: "That's completely fine. Point those things out during the walkthrough and I'll record them before pricing starts, so nothing depends on anyone's memory later. Anything set aside for family gets held, not sold.",
   },
   {
     q: "When do I get paid after an estate sale?",
-    a: "The same day the sale closes. The sale is totalled, the settlement report is handed over, and your proceeds are counted out before the house is locked up. Nothing sits in someone else's account waiting on a check to clear.",
+    a: "The same day the sale closes. I total the sale, hand over the settlement report, and count out your proceeds before the house is locked up. Nothing sits in someone else's account waiting on a check to clear.",
   },
   {
     q: "How much will my estate sale bring in?",
-    a: "Nobody can answer that honestly without walking the house first, and anyone who quotes a number over the phone is guessing. The walkthrough is free, takes about an hour, and ends with a straight answer about whether a sale is worth running at all.",
+    a: "I can't answer that honestly without walking the house first, and anyone who quotes you a number over the phone is guessing. The walkthrough is free, takes about an hour, and ends with a straight answer about whether a sale is worth running at all.",
   },
   {
     q: "Is my house too small for an estate sale?",
-    a: "Possibly, and you will be told so plainly. The $1,500 minimum exists because a sale below roughly $5,000 in gross does not leave enough for the family to be worth the work. If a walkthrough shows a sale is not the right answer, the better options — a donation pickup, a consignment shop, a single-lot buyer — get named at no charge.",
+    a: "Possibly, and I'll tell you so plainly. The $1,500 minimum exists because a sale below roughly $5,000 in gross doesn't leave enough for the family to be worth the work. If the walkthrough shows a sale isn't the right answer, I'll name the better options — a donation pickup, a consignment shop, a single-lot buyer — at no charge.",
   },
   {
     q: "Do you work with probate attorneys and professional fiduciaries?",
-    a: "Yes, and the reporting is built for it. When there is a duty to account for a decedent's personal property, an itemized and timestamped record with donation receipts is the difference between an accounting that stands and one that gets questioned. Attorneys and licensed fiduciaries can refer a matter directly.",
+    a: "Yes, and I built the reporting for it. When there's a duty to account for a decedent's personal property, an itemized and timestamped record with donation receipts is the difference between an accounting that stands and one that gets questioned. Attorneys and licensed fiduciaries can refer a matter to me directly.",
   },
   {
     q: "Which areas do you cover?",
-    a: "The San Fernando Valley — Encino, Sherman Oaks, Studio City, Woodland Hills and Tarzana as the core area, with Calabasas, Agoura Hills and Thousand Oaks also served. Staying local is the point: it means being at the house quickly and being there on sale day rather than sending a crew.",
+    a: "The San Fernando Valley — Encino, Sherman Oaks, Studio City, Woodland Hills and Tarzana as the core area, with Calabasas, Agoura Hills and Thousand Oaks also served. Staying local is the point: I can get to the house quickly and be there myself on sale day rather than sending a crew. If you're nearby but don't see your city listed, ask anyway.",
   },
   {
     q: "Do I have to sign a long contract?",
-    a: "No. The agreement is a short written document covering dates, what is included, and the 30% / $1,500-minimum fee in plain language. Nothing starts until you have signed it, and the walkthrough before it carries no obligation.",
+    a: "No. The agreement is a short written document covering dates, what's included, and the 30% / $1,500-minimum fee in plain language. Nothing starts until you've signed it, and the walkthrough before it carries no obligation.",
   },
 ];
 

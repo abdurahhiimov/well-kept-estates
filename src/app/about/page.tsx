@@ -141,14 +141,14 @@ export default function AboutPage() {
                     className="grid grid-cols-[7.5rem_1fr] items-baseline gap-4 border-b border-rule/60 py-3.5"
                   >
                     <dt className="label-mono">{f.k}</dt>
-                    <dd className="text-sm leading-relaxed text-foreground">
+                    <dd className="min-w-0 break-words text-sm leading-relaxed text-foreground">
                       {f.v}
                     </dd>
                   </div>
                 ))}
                 <div className="grid grid-cols-[7.5rem_1fr] items-baseline gap-4 border-b border-rule/60 py-3.5">
                   <dt className="label-mono">Elsewhere</dt>
-                  <dd className="text-sm">
+                  <dd className="min-w-0 break-words text-sm">
                     {site.sameAs.map((url) => (
                       <a
                         key={url}

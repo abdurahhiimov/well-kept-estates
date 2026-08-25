@@ -67,9 +67,13 @@ export default function ContactPage() {
           </Reveal>
         </div>
 
+        {/* `min-w-0` on the columns: a grid item defaults to `min-width:auto`,
+            which refuses to shrink below its longest unbreakable string. The
+            email address is one, so without this the whole page grew ~13px
+            wider than a 375px phone and scrolled sideways. */}
         <div className="mt-16 grid gap-12 lg:grid-cols-[0.8fr_1.2fr] lg:gap-20">
           {/* Details — set as a filled-in form, not icon tiles */}
-          <div>
+          <div className="min-w-0">
             <Reveal>
               <RuleDraw />
               <dl>
@@ -81,9 +85,10 @@ export default function ContactPage() {
                     <dt className="label-mono">{d.label}</dt>
                     <dd
                       className={
-                        d.mono
+                        "min-w-0 break-words " +
+                        (d.mono
                           ? "font-mono text-sm text-foreground"
-                          : "text-sm leading-relaxed text-foreground"
+                          : "text-sm leading-relaxed text-foreground")
                       }
                     >
                       {d.href ? (

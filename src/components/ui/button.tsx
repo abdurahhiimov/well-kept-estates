@@ -36,10 +36,18 @@ const buttonVariants = cva(
         ghost: "hover:bg-secondary hover:text-secondary-foreground",
         link: "text-primary underline-offset-4 hover:underline",
       },
+      /*
+        Horizontal padding and type size step up at `sm`. The labels here are
+        long ("Request a free walkthrough") and the base style is `nowrap`, so
+        at desktop padding the longest one measured 313px — wider than the
+        279px a 375px phone actually leaves inside the form's padding. A button
+        that cannot shrink drags its whole grid column with it, which is what
+        was making the contact page scroll sideways on a phone.
+      */
       size: {
-        default: "h-12 px-7 text-[0.78rem]",
-        sm: "h-10 px-5 text-[0.72rem]",
-        lg: "h-14 px-9 text-[0.84rem]",
+        default: "h-12 px-5 text-[0.74rem] sm:px-7 sm:text-[0.78rem]",
+        sm: "h-10 px-4 text-[0.7rem] sm:px-5 sm:text-[0.72rem]",
+        lg: "h-14 px-5 text-[0.76rem] sm:px-9 sm:text-[0.84rem]",
         icon: "h-11 w-11",
       },
     },

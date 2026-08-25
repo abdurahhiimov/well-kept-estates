@@ -273,6 +273,25 @@
       contrast(0.9);
   }
 
+  /* The map layer is a fixed 2048px wide. Anything narrower than that crops
+     it, and the towns at each end of the corridor are the first to go — which
+     is exactly what was happening on a phone. Scaling the whole layer keeps
+     every pin on screen; the towns span ~640px of layer, so 0.46 puts the
+     full spread inside a 375px viewport with room to spare. */
+  .valley-map {
+    --map-scale: 0.46;
+  }
+  @media (min-width: 640px) {
+    .valley-map {
+      --map-scale: 0.72;
+    }
+  }
+  @media (min-width: 1024px) {
+    .valley-map {
+      --map-scale: 1;
+    }
+  }
+
   /* ── Light bleed ─────────────────────────────────────────────────────
      A warm pool of light behind glass on dark sections; without something
      bright to bend, refraction has nothing to show. */

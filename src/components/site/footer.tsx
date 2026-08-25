@@ -12,9 +12,14 @@ export function SiteFooter() {
       <div className="container grid gap-10 py-14 md:grid-cols-[1.4fr_1fr_1fr]">
         <div>
           <Wordmark />
-          <p className="mt-4 max-w-xs text-sm leading-relaxed text-muted-foreground">
-            {business.tagline} Sorting, pricing, staging, and running the
-            sale — with a written record of where everything went.
+          <p className="mt-4 max-w-xs font-display text-base leading-snug text-foreground/90">
+            {business.motto}
+          </p>
+          <p className="mt-3 max-w-xs text-sm leading-relaxed text-muted-foreground">
+            {business.tagline} With a written record of where everything went.
+          </p>
+          <p className="mt-3 font-mono text-[0.68rem] uppercase tracking-[0.08em] text-muted-foreground">
+            {business.processChain}
           </p>
         </div>
 
@@ -46,7 +51,7 @@ export function SiteFooter() {
                 {contact.phone}
               </a>
             </li>
-            <li>
+            <li className="min-w-0 break-words">
               <a href={`mailto:${contact.email}`} className="hover:text-foreground">
                 {contact.email}
               </a>

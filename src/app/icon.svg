@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <!--
+    Favicon — the wordmark reduced to its monogram. A house icon is the
+    category default we're deliberately avoiding, so this is lettering:
+    "WK" in a serif over a terracotta rule, on the same ink ground the header
+    uses. Reads at 16px because it is two letterforms and a line, nothing more.
+    Colours are the Clay palette (--night, --foreground, --stamp) as hex, since
+    SVG rasterisers do not all accept the space-separated hsl() syntax.
+  -->
+  <rect width="64" height="64" rx="10" fill="#181411"/>
+  <text x="32" y="39"
+        font-family="Fraunces, Lora, Georgia, 'Times New Roman', serif"
+        font-size="29" font-weight="700" letter-spacing="-0.5"
+        text-anchor="middle" fill="#F4F1EB">WK</text>
+  <rect x="19" y="46" width="26" height="3" rx="1.5" fill="#D45C49"/>
+</svg>
