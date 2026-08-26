@@ -80,9 +80,36 @@ const cities = [
 
 const LEADER = 58;
 
+/*
+  Two label systems, because the layer is scaled on small screens.
+
+  At `lg` the layer is 1:1, so a 0.68rem pill is 0.68rem on screen and two
+  tiers (above / below) leave ~184 layer-px between any two names sharing a
+  tier — more than a 110px pill needs.
+
+  Below `lg` the layer is scaled to 0.46, and that same pill lands at about
+  5px: present, unreadable, which is the state this replaced. Sizing the type
+  UP in layer coordinates fixes the reading and breaks the spacing — a pill
+  legible after scaling is ~240 layer-px wide, wider than the 184 two tiers
+  allow. Four tiers put same-tier names 4 towns apart (~368 layer-px), which
+  clears them. Offsets are in layer pixels; multiply by 0.46 for the screen.
+*/
+const TIERS_SM = [-195, 105, -85, 210];
+
+/** Leader runs from the dot to just short of the pill. */
+function leader(offset: number) {
+  const gap = 26;
+  return offset < 0
+    ? { top: offset + gap, height: Math.abs(offset) - gap }
+    : { top: 0, height: offset - gap };
+}
+
 export function ValleyMap() {
   return (
-    <div className="valley-map relative aspect-[3/2] w-full overflow-hidden sm:aspect-[16/10] lg:aspect-[2.6/1]">
+    /* Taller than a map band would otherwise want to be: the towns sit on an
+       east-west line but their labels stack four deep below `lg`, and the
+       southernmost (Studio City) hangs lowest, so the box has to carry that. */
+    <div className="valley-map relative aspect-[4/3] w-full overflow-hidden sm:aspect-[16/10] lg:aspect-[2.6/1]">
       {/* One wrapper, one transform — tiles and pins scale together, so the
           projection stays honest at every width. */}
       <div
@@ -111,6 +138,18 @@ export function ValleyMap() {
         <Stagger gap={0.07} className="absolute inset-0">
           {cities.map((c, i) => {
             const above = i % 2 === 0;
+            const offLg = above ? -LEADER : LEADER;
+            const offSm = TIERS_SM[i % 4];
+            const lLg = leader(offLg);
+            const lSm = leader(offSm);
+            /* The end towns would hang off the edge if centred on their dot at
+               the wider small-screen pill size, so they anchor inward. */
+            const anchor =
+              i === 0
+                ? "translate-x-0 lg:-translate-x-1/2"
+                : i === cities.length - 1
+                  ? "-translate-x-full lg:-translate-x-1/2"
+                  : "-translate-x-1/2";
             return (
               <div
                 key={c.name}
@@ -130,26 +169,38 @@ export function ValleyMap() {
                           : "size-3 bg-foreground/55 lg:size-1.5")
                       }
                     />
-                    {/* Leader + name pill: legible only at full scale. */}
+                    {/* Leader + name pill. The offsets and sizes differ per
+                        breakpoint and are dynamic, so they ride in on custom
+                        properties and `globals.css` picks the pair. */}
                     <span
                       aria-hidden
-                      className="absolute left-0 hidden w-px bg-foreground/25 lg:block"
-                      style={{
-                        height: LEADER - 16,
-                        top: above ? -(LEADER - 16) : 0,
-                      }}
+                      className="city-leader absolute left-0 w-px bg-foreground/25"
+                      style={
+                        {
+                          "--lead-t-sm": `${lSm.top}px`,
+                          "--lead-h-sm": `${lSm.height}px`,
+                          "--lead-t-lg": `${lLg.top}px`,
+                          "--lead-h-lg": `${lLg.height}px`,
+                        } as React.CSSProperties
+                      }
                     />
                     <span
-                      className="absolute hidden -translate-x-1/2 lg:block"
-                      style={{ top: above ? -LEADER : LEADER, left: 0 }}
+                      className={`city-label absolute ${anchor}`}
+                      style={
+                        {
+                          left: 0,
+                          "--off-sm": `${offSm}px`,
+                          "--off-lg": `${offLg}px`,
+                        } as React.CSSProperties
+                      }
                     >
                       <LiquidGlass
                         strength="soft"
-                        className="glass-pill -translate-y-1/2 whitespace-nowrap px-4 py-[0.3rem] leading-none"
+                        className="glass-pill -translate-y-1/2 whitespace-nowrap px-8 py-[0.55rem] leading-none lg:px-4 lg:py-[0.3rem]"
                       >
                         <span
                           className={
-                            "font-mono text-[0.68rem] uppercase tracking-[0.07em] " +
+                            "font-mono text-[1.4rem] uppercase tracking-[0.07em] lg:text-[0.68rem] " +
                             (c.core ? "text-foreground" : "text-foreground/70")
                           }
                         >

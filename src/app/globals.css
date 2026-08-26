@@ -292,6 +292,28 @@
     }
   }
 
+  /* Label and leader offsets are computed per town in the component and
+     handed over as custom properties, because they are dynamic values that
+     also have to change at a breakpoint — which Tailwind's responsive
+     prefixes cannot do for an inline style. Small screens use four tiers and
+     larger type (the layer is scaled down); `lg` uses two and the real size. */
+  .city-label {
+    top: var(--off-sm);
+  }
+  .city-leader {
+    top: var(--lead-t-sm);
+    height: var(--lead-h-sm);
+  }
+  @media (min-width: 1024px) {
+    .city-label {
+      top: var(--off-lg);
+    }
+    .city-leader {
+      top: var(--lead-t-lg);
+      height: var(--lead-h-lg);
+    }
+  }
+
   /* ── Light bleed ─────────────────────────────────────────────────────
      A warm pool of light behind glass on dark sections; without something
      bright to bend, refraction has nothing to show. */
