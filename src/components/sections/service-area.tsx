@@ -55,10 +55,33 @@ export function ServiceArea() {
               {serviceArea.extended.join(" · ")}
             </span>
           </div>
-          {/* No tile attribution any more — the map is drawn here, not fetched. */}
+          {/* The map image is served from this domain, but it was rendered from
+              OpenStreetMap data, which is ODbL — the credit is required whether
+              or not we are fetching anything at runtime. */}
           <p className="mt-5 text-sm text-muted-foreground">
             Just outside these? Ask anyway — I&apos;ll tell you honestly if
-            I&apos;m the right fit.
+            I&apos;m the right fit.{" "}
+            <span className="text-foreground/40">
+              Map data ©{" "}
+              <a
+                href="https://www.openstreetmap.org/copyright"
+                rel="noopener"
+                target="_blank"
+                className="underline decoration-foreground/20 underline-offset-2 hover:decoration-foreground/50"
+              >
+                OpenStreetMap
+              </a>{" "}
+              contributors, rendered from{" "}
+              <a
+                href="https://openfreemap.org"
+                rel="noopener"
+                target="_blank"
+                className="underline decoration-foreground/20 underline-offset-2 hover:decoration-foreground/50"
+              >
+                OpenFreeMap
+              </a>
+              .
+            </span>
           </p>
         </Reveal>
       </div>
