@@ -5,7 +5,6 @@ import Image from "next/image";
 import Link from "next/link";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { Menu, X } from "lucide-react";
-import { Wordmark } from "@/components/site/wordmark";
 import { Button } from "@/components/ui/button";
 import { nav, cta } from "@/lib/content";
 
@@ -48,27 +47,21 @@ export function SiteHeader() {
       */}
       <div className="border-b border-white/10 bg-night">
         <div className="mx-auto flex h-20 w-full max-w-[1600px] items-center justify-between gap-6 px-6 md:h-24">
-          {/*
-            The badge carries "WELL KEPT ESTATES" in its own lettering, which is
-            a smudge at header size and says the name twice next to the
-            wordmark. So the header gets the emblem alone, set on the cream
-            field it already lives on — a seal beside the name, not a second
-            copy of it.
-          */}
+          {/* The badge whole, lettering and all. It carries the name itself,
+              so there's no wordmark beside it. */}
           <Link
             href="/"
             aria-label="Well Kept Estates — home"
-            className="flex shrink-0 items-center gap-3"
+            className="flex shrink-0 items-center"
           >
             <Image
-              src="/logo-seal.png"
-              alt=""
-              width={512}
-              height={512}
+              src="/logo-badge.png"
+              alt="Well Kept Estates"
+              width={440}
+              height={480}
               priority
-              className="size-10 md:size-12"
+              className="h-[3.75rem] w-auto md:h-[4.5rem]"
             />
-            <Wordmark size="md" />
           </Link>
 
           <nav className="hidden lg:block">
