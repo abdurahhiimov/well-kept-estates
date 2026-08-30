@@ -5,10 +5,11 @@
  * commission numbers, the service area, process steps, and the sample
  * settlement report. Edit this file, not the components.
  *
- * ⚠️  PLACEHOLDERS — replace before launch:
- *   - founder.name       (currently blank; the note reads fine without it)
- *   - contact.phone      (fictional 555 number)
- *   - contact.email      (domain not confirmed)
+ * Phone and email are live and real — the settlement report and the referral
+ * pitch both promise one person answers, so these have to reach him.
+ *
+ * ⚠️  PLACEHOLDER — still to replace:
+ *   - founder.name       (blank; the note signs "The founder" until set)
  */
 
 export const business = {
@@ -22,9 +23,9 @@ export const business = {
 
 export const contact = {
   // Google Voice line — one person answers, so we don't promise 24/7.
-  phone: "(818) 555-0143",
-  phoneHref: "tel:+18185550143",
-  email: "hello@wellkeptestates.space",
+  phone: "(424) 395-7965",
+  phoneHref: "tel:+14243957965",
+  email: "wellkeptestates@gmail.com",
   hours: "One person reads every message. You'll hear back within one business day.",
 };
 

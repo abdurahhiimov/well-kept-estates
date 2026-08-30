@@ -8,24 +8,13 @@ export function FounderNote() {
   return (
     <section className="border-y border-border bg-secondary/50 py-20 md:py-28">
       <div className="container">
-        <div className="mx-auto grid max-w-4xl gap-10 md:grid-cols-[minmax(0,14rem)_1fr] md:items-start md:gap-16">
-          {/* Photo placeholder — an honest empty frame, not a stock photo. */}
-          <Reveal>
-            <figure className="mx-auto w-full max-w-[14rem]">
-              <div className="relative flex aspect-[4/5] items-center justify-center overflow-hidden border border-dashed border-border bg-card">
-                <div aria-hidden className="ruled absolute inset-0 opacity-40" />
-                <div className="relative text-center">
-                  <span className="font-display text-4xl font-semibold text-muted-foreground">
-                    WK
-                  </span>
-                  <p className="mt-1 font-mono text-[0.62rem] uppercase tracking-[0.14em] text-muted-foreground">
-                    Photo to come
-                  </p>
-                </div>
-              </div>
-            </figure>
-          </Reveal>
-
+        {/*
+          No portrait. The note is the founder's voice and carries itself —
+          an empty frame captioned "photo to come" advertised something
+          missing, and a face was never what this section asks anyone to
+          trust. Set in a single measured column instead.
+        */}
+        <div className="mx-auto max-w-3xl">
           <div>
             <Reveal>
               <SectionLabel>A note from the founder</SectionLabel>

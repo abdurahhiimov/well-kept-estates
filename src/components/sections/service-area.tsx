@@ -55,12 +55,10 @@ export function ServiceArea() {
               {serviceArea.extended.join(" · ")}
             </span>
           </div>
+          {/* No tile attribution any more — the map is drawn here, not fetched. */}
           <p className="mt-5 text-sm text-muted-foreground">
             Just outside these? Ask anyway — I&apos;ll tell you honestly if
-            I&apos;m the right fit.{" "}
-            <span className="text-foreground/40">
-              Map data © OpenStreetMap contributors, tiles © CARTO.
-            </span>
+            I&apos;m the right fit.
           </p>
         </Reveal>
       </div>

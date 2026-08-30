@@ -7,35 +7,30 @@ import { LiquidGlass } from "@/components/motion/glass";
  * ─────────────────────────────────────────────────────────────────────────
  * VALLEY MAP
  * ─────────────────────────────────────────────────────────────────────────
- * Real map tiles, placed by hand.
+ * Drawn here, not fetched.
  *
- * Tiles come from CARTO's `dark_nolabels` basemap rather than standard OSM.
- * Two reasons. It's already dark and desaturated, so it needs a light touch
- * instead of the heavy filter stack that was smearing OSM's bright tiles into
- * mud. And it ships without place names, so the only labels on the map are
- * ours — no competing with a printed "Tarzana" sitting next to our pin for it.
+ * This used CARTO's `dark_nolabels` raster tiles until CARTO began requiring
+ * an API key for raster and stamping every un-keyed tile with a repeating
+ * "API KEY REQUIRED" watermark — which landed on the live site without
+ * warning. Their free tier is real (5M tiles/month) and the key is free, but
+ * a brochure map that shows eight towns does not need to be a third party's
+ * uptime, terms, or billing decision. So the geography is drawn from a short
+ * table of coordinates instead: the corridor freeways, the ridgelines that
+ * define the Valley, and nothing else.
  *
- * Fixing centre and zoom ourselves (rather than handing a bounding box to
- * OSM's iframe embed, which snaps to whole zoom levels and reframes on its
- * own) means tiles and markers come out of the same Web Mercator projection,
- * so a pin lands on its town by construction.
+ * What that buys: no key, no watermark, no attribution obligation, no 45 tile
+ * requests, and it cannot break again on someone else's schedule. What it
+ * costs: street-level detail, which nobody was navigating by.
  *
- * The tile layer is a fixed pixel size centred in its container. On a wide
- * screen it is shown 1:1. Narrower than that, the whole layer — tiles AND
- * markers together, inside one wrapper — is scaled down by `--map-scale`, so
- * a pin still lands on its town: both are in the same coordinate space and
- * the same transform applies to both. Without this the container simply
- * cropped the middle of a 2048px layer and the outer towns (Thousand Oaks on
- * one end, Studio City on the other) fell off the edges entirely.
+ * The projection is unchanged — real Web Mercator, same as the tiles used —
+ * so every feature and every pin is placed from true lon/lat and the pins sit
+ * on their towns by construction rather than by eye.
  *
- * The tiles are @2x, so they survive being scaled down — at 0.46 they are
- * still supersampled rather than blurred.
- *
- * The name pills do NOT survive it: scaled with the layer they become
- * illegible, and counter-scaling them back up makes neighbours overlap, since
- * the towns sit ~150px apart and a pill is wider than that. So below `lg` the
- * pins carry the geography on their own and the town list underneath the map
- * does the naming.
+ * The layer is a fixed pixel size centred in its container: 1:1 on a wide
+ * screen, scaled by `--map-scale` below that, with the drawing and the markers
+ * inside one wrapper so a pin cannot drift off its town. Before that the
+ * container simply cropped the middle of a 2048px layer and the towns at each
+ * end fell off the edges.
  */
 
 const ZOOM = 11;
@@ -53,12 +48,94 @@ const latToY = (lat: number) => {
 const originX = lonToX(CENTER.lon) - LAYER.w / 2;
 const originY = latToY(CENTER.lat) - LAYER.h / 2;
 
-const tiles: { x: number; y: number }[] = [];
-for (let x = Math.floor(originX / TILE); x <= Math.floor((originX + LAYER.w) / TILE); x++) {
-  for (let y = Math.floor(originY / TILE); y <= Math.floor((originY + LAYER.h) / TILE); y++) {
-    tiles.push({ x, y });
+/** lon/lat → layer pixels. Everything drawn below goes through this. */
+const at = (lon: number, lat: number): [number, number] => [
+  lonToX(lon) - originX,
+  latToY(lat) - originY,
+];
+
+const line = (pts: [number, number][]) =>
+  pts
+    .map(([lon, lat], i) => {
+      const [x, y] = at(lon, lat);
+      return `${i ? "L" : "M"}${x.toFixed(1)} ${y.toFixed(1)}`;
+    })
+    .join(" ");
+
+const area = (pts: [number, number][]) => `${line(pts)} Z`;
+
+/** Quadratic smoothing through the points — freeways bend, they don't kink. */
+const curve = (pts: [number, number][], close = false) => {
+  const P = pts.map(([lo, la]) => at(lo, la));
+  if (P.length < 3) return line(pts);
+  let d = `M${P[0][0].toFixed(1)} ${P[0][1].toFixed(1)}`;
+  for (let i = 1; i < P.length - 1; i++) {
+    const [cx, cy] = P[i];
+    const [nx, ny] = P[i + 1];
+    d += ` Q${cx.toFixed(1)} ${cy.toFixed(1)} ${((cx + nx) / 2).toFixed(1)} ${((cy + ny) / 2).toFixed(1)}`;
   }
-}
+  const L = P[P.length - 1];
+  d += ` L${L[0].toFixed(1)} ${L[1].toFixed(1)}`;
+  return close ? `${d} Z` : d;
+};
+
+/*
+  Drawn as a basin rather than as mountains.
+
+  The first attempt filled the ranges as dark polygons, and clipped by the
+  frame they read as black slabs laid over the picture — design blocks, not
+  landscape. Inverting it works far better: light the valley FLOOR, leave
+  everything around it as the dark ground, and soften the boundary so it
+  reads as a basin rimmed by hills instead of a shape with an outline.
+
+  It also happens to tell the truth about the service area. The San Fernando
+  floor holds the five core towns; Calabasas, Agoura Hills and Thousand Oaks
+  sit west through the hills in the Conejo, which is exactly why they are the
+  "also serving" list.
+*/
+const SFV_FLOOR = curve(
+  [
+    [-118.70, 34.168], [-118.66, 34.196], [-118.625, 34.244], [-118.585, 34.286],
+    [-118.52, 34.312], [-118.44, 34.316], [-118.375, 34.292], [-118.335, 34.242],
+    [-118.345, 34.192], [-118.392, 34.152], [-118.452, 34.142], [-118.515, 34.146],
+    [-118.575, 34.152], [-118.64, 34.158], [-118.70, 34.168],
+  ],
+  true,
+);
+
+/* The Conejo, west over the grade — smaller, and drawn fainter to match. */
+const CONEJO_FLOOR = curve(
+  [
+    [-118.90, 34.196], [-118.855, 34.212], [-118.795, 34.208], [-118.755, 34.184],
+    [-118.745, 34.152], [-118.79, 34.132], [-118.855, 34.136], [-118.895, 34.162],
+    [-118.90, 34.196],
+  ],
+  true,
+);
+
+const FREEWAYS = {
+  // US-101, the Ventura — the spine every town on the list sits along.
+  us101: curve([
+    [-119.02, 34.212], [-118.95, 34.196], [-118.885, 34.178], [-118.825, 34.160],
+    [-118.760, 34.148], [-118.700, 34.142], [-118.645, 34.148], [-118.600, 34.162],
+    [-118.550, 34.170], [-118.500, 34.164], [-118.450, 34.154], [-118.400, 34.144],
+    [-118.345, 34.134], [-118.300, 34.126],
+  ]),
+  // I-405, crossing the 101 at the Sepulveda Pass.
+  i405: curve([
+    [-118.492, 34.315], [-118.486, 34.262], [-118.478, 34.212],
+    [-118.471, 34.166], [-118.464, 34.126], [-118.452, 34.075],
+  ]),
+  // CA-118, the Reagan, across the north Valley.
+  ca118: curve([
+    [-118.72, 34.281], [-118.63, 34.280], [-118.54, 34.277],
+    [-118.44, 34.273], [-118.36, 34.268],
+  ]),
+  // CA-27, Topanga Canyon, north–south on the west side.
+  ca27: curve([[-118.603, 34.240], [-118.601, 34.196], [-118.598, 34.140], [-118.590, 34.086]]),
+  // CA-170, the Hollywood, peeling north from the 101.
+  ca170: curve([[-118.401, 34.148], [-118.397, 34.196], [-118.393, 34.244]]),
+};
 
 /*
   The towns sit roughly 150px apart at this zoom and the labels are wider than
@@ -120,20 +197,87 @@ export function ValleyMap() {
           transform: "translate(-50%, -50%) scale(var(--map-scale, 1))",
         }}
       >
-        <div aria-hidden className="map-tint absolute inset-0">
-          {tiles.map((t) => (
-            <img
-              key={`${t.x}-${t.y}`}
-              src={`https://basemaps.cartocdn.com/dark_nolabels/${ZOOM}/${t.x}/${t.y}@2x.png`}
-              alt=""
-              loading="lazy"
-              width={TILE}
-              height={TILE}
-              className="absolute max-w-none"
-              style={{ left: t.x * TILE - originX, top: t.y * TILE - originY }}
-            />
-          ))}
-        </div>
+        <svg
+          aria-hidden
+          className="absolute inset-0"
+          width={LAYER.w}
+          height={LAYER.h}
+          viewBox={`0 0 ${LAYER.w} ${LAYER.h}`}
+          preserveAspectRatio="none"
+        >
+          <defs>
+            {/* Blurred edges: a basin has a rim, not an outline. */}
+            <filter id="wke-soft" x="-25%" y="-25%" width="150%" height="150%">
+              <feGaussianBlur stdDeviation="15" />
+            </filter>
+            <filter id="wke-soft-sm" x="-25%" y="-25%" width="150%" height="150%">
+              <feGaussianBlur stdDeviation="12" />
+            </filter>
+            {/*
+              The cross freeways genuinely run off past the Valley, but drawn
+              at full strength to the frame edge they read as scratches across
+              the picture rather than roads. Fading them out top and bottom
+              lets them leave without drawing attention to where they stop.
+            */}
+            <linearGradient id="wke-roadfade" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stopColor="#000" />
+              <stop offset="16%" stopColor="#fff" />
+              <stop offset="72%" stopColor="#fff" />
+              <stop offset="96%" stopColor="#000" />
+            </linearGradient>
+            <mask id="wke-roadmask">
+              <rect width={LAYER.w} height={LAYER.h} fill="url(#wke-roadfade)" />
+            </mask>
+            {/* Everything inside the floors, nothing outside. */}
+            <mask id="wke-basin">
+              <rect width={LAYER.w} height={LAYER.h} fill="#000" />
+              <path d={SFV_FLOOR} fill="#fff" filter="url(#wke-soft)" />
+            </mask>
+            <mask id="wke-basin-w">
+              <rect width={LAYER.w} height={LAYER.h} fill="#000" />
+              <path d={CONEJO_FLOOR} fill="#fff" filter="url(#wke-soft-sm)" />
+            </mask>
+            {/* The Valley is famously gridded; at this zoom that texture is all
+                of the street network that survives. */}
+            <pattern id="wke-grid" width="46" height="46" patternUnits="userSpaceOnUse">
+              <path
+                d="M46 0V46M0 46H46"
+                fill="none"
+                stroke="hsl(36 16% 70%)"
+                strokeWidth="1"
+                opacity="0.3"
+              />
+            </pattern>
+          </defs>
+
+          {/* Ground — the hills, unlit. */}
+          <rect width={LAYER.w} height={LAYER.h} fill="hsl(24 17% 8%)" />
+
+          {/* The two floors, lit, with the street grid only where there are
+              streets. The Conejo sits lower — it is the outer half of the area. */}
+          <g mask="url(#wke-basin-w)">
+            <rect width={LAYER.w} height={LAYER.h} fill="hsl(28 14% 13%)" />
+            <rect width={LAYER.w} height={LAYER.h} fill="url(#wke-grid)" opacity="0.72" />
+          </g>
+          <g mask="url(#wke-basin)">
+            <rect width={LAYER.w} height={LAYER.h} fill="hsl(30 15% 16%)" />
+            <rect width={LAYER.w} height={LAYER.h} fill="url(#wke-grid)" />
+          </g>
+
+          {/* Freeways. The 101 is the one that matters — it is the service area
+              in a single line — so it is brighter and heavier than the rest,
+              and it alone is exempt from the fade, because it should read from
+              one edge of the frame to the other. */}
+          <g fill="none" strokeLinecap="round" strokeLinejoin="round">
+            <g mask="url(#wke-roadmask)">
+              {[FREEWAYS.i405, FREEWAYS.ca118, FREEWAYS.ca27, FREEWAYS.ca170].map((d, i) => (
+                <path key={i} d={d} stroke="hsl(36 16% 72%)" strokeWidth="2.5" opacity="0.26" />
+              ))}
+            </g>
+            <path d={FREEWAYS.us101} stroke="hsl(30 40% 70%)" strokeWidth="9" opacity="0.09" />
+            <path d={FREEWAYS.us101} stroke="hsl(34 30% 78%)" strokeWidth="3.25" opacity="0.5" />
+          </g>
+        </svg>
 
         <Stagger gap={0.07} className="absolute inset-0">
           {cities.map((c, i) => {
