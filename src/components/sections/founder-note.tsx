@@ -44,7 +44,7 @@ export function FounderNote() {
             {/* Still no portrait — the reasoning above holds. The mark is a
                 different thing: a seal at the foot of the note, next to the
                 signature, the way a stamp sits under a signed page. */}
-            <Reveal delay={0.1} className="mt-8 flex max-w-sm items-center gap-4">
+            <Reveal delay={0.1} className="mt-8 flex max-w-md items-center gap-4">
               <Image
                 src="/logo-emblem.png"
                 alt=""
