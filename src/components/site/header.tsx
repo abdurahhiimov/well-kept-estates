@@ -5,11 +5,13 @@ import Image from "next/image";
 import Link from "next/link";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { Menu, X } from "lucide-react";
+import { SiteMark, type MarkVariant } from "@/components/site/site-mark";
 import { Button } from "@/components/ui/button";
 import { nav, cta } from "@/lib/content";
 
 export function SiteHeader() {
   const [open, setOpen] = useState(false);
+  const [mark, setMark] = useState<MarkVariant>("badge");
   const [hovered, setHovered] = useState<string | null>(null);
   const reduced = useReducedMotion();
 
@@ -45,27 +47,9 @@ export function SiteHeader() {
         a single pane blurs everything passing under it uniformly. It's also why
         there's no pill nested inside — that was the box-in-a-box.
       */}
-      <div className="border-b border-white/10 bg-night">
+      <div className="relative border-b border-white/10 bg-night">
         <div className="mx-auto flex h-20 w-full max-w-[1600px] items-center justify-between gap-6 px-6 md:h-24">
-          {/* The badge whole, lettering and all. It carries the name itself,
-              so there's no wordmark beside it. */}
-          <Link
-            href="/"
-            aria-label="Well Kept Estates — home"
-            className="ml-2 flex shrink-0 items-center md:ml-5"
-          >
-            {/* Sized to leave about 4px of bar above and below — near enough to
-                the edges to read as a plate set into the bar, not floating in
-                the middle of it. */}
-            <Image
-              src="/logo-badge.png"
-              alt="Well Kept Estates"
-              width={440}
-              height={480}
-              priority
-              className="h-[4.5rem] w-auto md:h-[5.5rem]"
-            />
-          </Link>
+          <SiteMark variant={mark} />
 
           <nav className="hidden lg:block">
             <ul className="flex items-center gap-3" onMouseLeave={() => setHovered(null)}>
@@ -98,6 +82,26 @@ export function SiteHeader() {
           >
             {cta.label}
           </Link>
+
+          {process.env.NODE_ENV === "development" && (
+            <div className="absolute left-1/2 top-full mt-2 flex -translate-x-1/2 gap-1.5 rounded-sm border border-white/15 bg-night/95 p-1.5 font-mono text-[0.6rem] uppercase tracking-[0.08em]">
+              {(["badge", "reversed", "emblem", "overhang"] as const).map((v) => (
+                <button
+                  key={v}
+                  type="button"
+                  onClick={() => setMark(v)}
+                  className={
+                    "rounded-sm px-2 py-0.5 transition-colors " +
+                    (mark === v
+                      ? "bg-stamp/25 text-foreground"
+                      : "text-muted-foreground hover:text-foreground")
+                  }
+                >
+                  {v}
+                </button>
+              ))}
+            </div>
+          )}
 
           <button
             type="button"
