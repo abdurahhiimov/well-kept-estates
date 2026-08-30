@@ -52,15 +52,18 @@ export function SiteHeader() {
           <Link
             href="/"
             aria-label="Well Kept Estates — home"
-            className="flex shrink-0 items-center"
+            className="ml-2 flex shrink-0 items-center md:ml-5"
           >
+            {/* Sized to leave about 4px of bar above and below — near enough to
+                the edges to read as a plate set into the bar, not floating in
+                the middle of it. */}
             <Image
               src="/logo-badge.png"
               alt="Well Kept Estates"
               width={440}
               height={480}
               priority
-              className="h-[3.75rem] w-auto md:h-[4.5rem]"
+              className="h-[4.5rem] w-auto md:h-[5.5rem]"
             />
           </Link>
 
