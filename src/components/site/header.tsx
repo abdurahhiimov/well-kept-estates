@@ -5,13 +5,12 @@ import Image from "next/image";
 import Link from "next/link";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { Menu, X } from "lucide-react";
-import { SiteMark, type MarkVariant } from "@/components/site/site-mark";
+import { Wordmark } from "@/components/site/wordmark";
 import { Button } from "@/components/ui/button";
 import { nav, cta } from "@/lib/content";
 
 export function SiteHeader() {
   const [open, setOpen] = useState(false);
-  const [mark, setMark] = useState<MarkVariant>("badge");
   const [hovered, setHovered] = useState<string | null>(null);
   const reduced = useReducedMotion();
 
@@ -49,10 +48,30 @@ export function SiteHeader() {
       */}
       <div className="relative border-b border-white/10 bg-night">
         <div className="mx-auto flex h-20 w-full max-w-[1600px] items-center justify-between gap-6 px-6 md:h-24">
-          <SiteMark variant={mark} />
+          {/* Reversed lockup: the emblem knocked out to cream so it carries
+              the same weight as the type beside it. The badge's own cream
+              ground put a bordered plate inside a bordered bar. */}
+          <Link
+            href="/"
+            aria-label="Well Kept Estates — home"
+            className="flex shrink-0 items-center gap-3.5"
+          >
+            <Image
+              src="/logo-emblem-reversed.png"
+              alt=""
+              width={706}
+              height={525}
+              priority
+              className="h-10 w-auto md:h-12"
+            />
+            <Wordmark size="md" />
+          </Link>
 
           <nav className="hidden lg:block">
-            <ul className="flex items-center gap-3" onMouseLeave={() => setHovered(null)}>
+            <ul
+              className="flex items-center gap-3"
+              onMouseLeave={() => setHovered(null)}
+            >
               {nav.map((item) => (
                 <li key={item.href} className="relative">
                   <Link
@@ -65,7 +84,11 @@ export function SiteHeader() {
                       <motion.span
                         layoutId="nav-underline"
                         className="absolute inset-x-5 -bottom-0.5 h-px bg-stamp"
-                        transition={{ type: "spring", stiffness: 420, damping: 34 }}
+                        transition={{
+                          type: "spring",
+                          stiffness: 420,
+                          damping: 34,
+                        }}
                       />
                     )}
                   </Link>
@@ -82,26 +105,6 @@ export function SiteHeader() {
           >
             {cta.label}
           </Link>
-
-          {process.env.NODE_ENV === "development" && (
-            <div className="absolute left-1/2 top-full mt-2 flex -translate-x-1/2 gap-1.5 rounded-sm border border-white/15 bg-night/95 p-1.5 font-mono text-[0.6rem] uppercase tracking-[0.08em]">
-              {(["badge", "reversed", "emblem", "overhang"] as const).map((v) => (
-                <button
-                  key={v}
-                  type="button"
-                  onClick={() => setMark(v)}
-                  className={
-                    "rounded-sm px-2 py-0.5 transition-colors " +
-                    (mark === v
-                      ? "bg-stamp/25 text-foreground"
-                      : "text-muted-foreground hover:text-foreground")
-                  }
-                >
-                  {v}
-                </button>
-              ))}
-            </div>
-          )}
 
           <button
             type="button"

@@ -7,7 +7,7 @@ import { PointerLight } from "@/components/motion/pointer-light";
 import { RuleDraw } from "@/components/motion/rule";
 import { LiquidGlass } from "@/components/motion/glass";
 import { Button } from "@/components/ui/button";
-import { HeroAside } from "@/components/sections/hero-aside";
+import { HeroWatermark } from "@/components/sections/hero-aside";
 import { commission, cta } from "@/lib/content";
 
 export function Hero() {
@@ -31,6 +31,8 @@ export function Hero() {
         <div className="ruled-fade absolute inset-0 opacity-25" />
       </div>
 
+      <HeroWatermark />
+
       <div className="container relative flex flex-col items-start pb-24 pt-24 md:pb-32 md:pt-28">
         <Reveal y={8} immediate>
           <p className="label-mono">Estate sales · San Fernando Valley</p>
@@ -45,54 +47,50 @@ export function Hero() {
             staggerDuration={0.16}
             transition={{ type: "spring", stiffness: 200, damping: 30 }}
           >
-            {"Someone kept these things well.\nWe'll see them off the same way."}
+            {
+              "Someone kept these things well.\nWe'll see them off the same way."
+            }
           </VerticalCutReveal>
         </h1>
 
-        <div className="mt-9 grid w-full gap-x-14 gap-y-12 lg:grid-cols-[minmax(0,34rem)_minmax(0,24rem)] lg:items-start">
-          <div className="flex flex-col items-start">
-        <Reveal delay={0.5} immediate className="max-w-xl">
-          <p className="lead">
-            A house full of a lifetime&apos;s belongings, and no idea where to
-            start. I take the whole job — sorting, pricing, staging, and running
-            the sale itself — and hand you a written record of where every piece
-            went.
-          </p>
-        </Reveal>
+        <div className="mt-9 flex w-full flex-col items-start">
+          <Reveal delay={0.5} immediate className="max-w-xl">
+            <p className="lead">
+              A house full of a lifetime&apos;s belongings, and no idea where to
+              start. I take the whole job — sorting, pricing, staging, and
+              running the sale itself — and hand you a written record of where
+              every piece went.
+            </p>
+          </Reveal>
 
-        <Reveal delay={0.62} immediate className="mt-11">
-          <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:gap-5">
-            <Button asChild size="lg" variant="paper">
+          <Reveal delay={0.62} immediate className="mt-11">
+            <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:gap-5">
+              <Button asChild size="lg" variant="paper">
                 <Link href={cta.href}>{cta.label}</Link>
               </Button>
-            <Button asChild size="lg" variant="outline">
+              <Button asChild size="lg" variant="outline">
                 <Link href="/#how-it-works">See how a sale goes</Link>
               </Button>
-          </div>
-        </Reveal>
+            </div>
+          </Reveal>
 
-        {/* The fee, on glass — a card floating over the lit ground, where the
-            refraction actually has something to work with. */}
-        <Reveal delay={0.75} immediate className="mt-14 w-full max-w-lg">
-          <LiquidGlass
-            strength="strong"
-            interactive
-            className="glass-round px-6 py-5"
-          >
-            <p className="label-mono">Our fee</p>
-            <p className="mt-2 whitespace-nowrap font-mono text-xl text-foreground sm:text-2xl">
-              {commission.rateLabel} of gross
-              <span className="mx-2 text-foreground/35">·</span>
-              {commission.minimumLabel} minimum
-            </p>
-            <p className="mt-3 text-sm text-muted-foreground">
-              Stated on the first call, not buried in the contract.
-            </p>
-          </LiquidGlass>
-        </Reveal>
-          </div>
-
-          <HeroAside />
+          <Reveal delay={0.75} immediate className="mt-14 w-full max-w-lg">
+            <LiquidGlass
+              strength="strong"
+              interactive
+              className="glass-round px-6 py-5"
+            >
+              <p className="label-mono">Our fee</p>
+              <p className="mt-2 whitespace-nowrap font-mono text-xl text-foreground sm:text-2xl">
+                {commission.rateLabel} of gross
+                <span className="mx-2 text-foreground/35">·</span>
+                {commission.minimumLabel} minimum
+              </p>
+              <p className="mt-3 text-sm text-muted-foreground">
+                Stated on the first call, not buried in the contract.
+              </p>
+            </LiquidGlass>
+          </Reveal>
         </div>
       </div>
     </section>
