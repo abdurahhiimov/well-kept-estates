@@ -16,14 +16,15 @@ export function HeroWatermark() {
   return (
     <div
       aria-hidden
-      className="pointer-events-none absolute -right-24 top-1/2 hidden -translate-y-1/2 opacity-[0.06] lg:block"
+      className="pointer-events-none absolute right-8 top-1/2 hidden -translate-y-1/2 opacity-[0.07] lg:block xl:right-24"
     >
       <Image
         src="/logo-emblem-reversed.png"
         alt=""
-        width={706}
-        height={525}
-        className="h-[34rem] w-auto"
+        width={1412}
+        height={1050}
+        sizes="(min-width: 1280px) 26rem, 22rem"
+        className="h-[22rem] w-auto xl:h-[26rem]"
       />
     </div>
   );

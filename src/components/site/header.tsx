@@ -59,8 +59,8 @@ export function SiteHeader() {
             <Image
               src="/logo-emblem-reversed.png"
               alt=""
-              width={706}
-              height={525}
+              width={1412}
+              height={1050}
               priority
               className="h-10 w-auto md:h-12"
             />
