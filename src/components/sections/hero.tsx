@@ -7,6 +7,7 @@ import { PointerLight } from "@/components/motion/pointer-light";
 import { RuleDraw } from "@/components/motion/rule";
 import { LiquidGlass } from "@/components/motion/glass";
 import { Button } from "@/components/ui/button";
+import { HeroAside } from "@/components/sections/hero-aside";
 import { commission, cta } from "@/lib/content";
 
 export function Hero() {
@@ -48,7 +49,9 @@ export function Hero() {
           </VerticalCutReveal>
         </h1>
 
-        <Reveal delay={0.5} immediate className="mt-9 max-w-xl">
+        <div className="mt-9 grid w-full gap-x-14 gap-y-12 lg:grid-cols-[minmax(0,34rem)_minmax(0,24rem)] lg:items-start">
+          <div className="flex flex-col items-start">
+        <Reveal delay={0.5} immediate className="max-w-xl">
           <p className="lead">
             A house full of a lifetime&apos;s belongings, and no idea where to
             start. I take the whole job — sorting, pricing, staging, and running
@@ -70,7 +73,7 @@ export function Hero() {
 
         {/* The fee, on glass — a card floating over the lit ground, where the
             refraction actually has something to work with. */}
-        <Reveal delay={0.75} immediate className="mt-16 w-full max-w-lg">
+        <Reveal delay={0.75} immediate className="mt-14 w-full max-w-lg">
           <LiquidGlass
             strength="strong"
             interactive
@@ -87,6 +90,10 @@ export function Hero() {
             </p>
           </LiquidGlass>
         </Reveal>
+          </div>
+
+          <HeroAside />
+        </div>
       </div>
     </section>
   );
