@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { Menu, X } from "lucide-react";
@@ -31,7 +32,7 @@ export function SiteHeader() {
       */
       style={
         {
-          "--glass-tint": "26 20 16",
+          "--glass-tint": "42 38 34",
           "--glass-tint-a": "0.93",
           "--glass-rim": "255 255 255",
           "--glass-rim-a": "0.13",
@@ -47,7 +48,26 @@ export function SiteHeader() {
       */}
       <div className="border-b border-white/10 bg-night">
         <div className="mx-auto flex h-20 w-full max-w-[1600px] items-center justify-between gap-6 px-6 md:h-24">
-          <Link href="/" aria-label="Well Kept Estates — home" className="shrink-0">
+          {/*
+            The badge carries "WELL KEPT ESTATES" in its own lettering, which is
+            a smudge at header size and says the name twice next to the
+            wordmark. So the header gets the emblem alone, set on the cream
+            field it already lives on — a seal beside the name, not a second
+            copy of it.
+          */}
+          <Link
+            href="/"
+            aria-label="Well Kept Estates — home"
+            className="flex shrink-0 items-center gap-3"
+          >
+            <Image
+              src="/logo-seal.png"
+              alt=""
+              width={512}
+              height={512}
+              priority
+              className="size-10 md:size-12"
+            />
             <Wordmark size="md" />
           </Link>
 

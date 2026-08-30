@@ -20,48 +20,56 @@
   material — navigation layer, not everywhere, never glass over glass — is
   followed here, and glass never sits over the report or a form field.
 
-  Deliberately avoided: navy + gold (funeral-home cliché), sage + cream (a
-  direct competitor), indigo gradients and pill badges (the AI-template tells).
+  Palette: espresso #2A2622, cream #F6F2EA, tan #DCD3C2, moss #4A5B3F — taken
+  from the badge, so the mark and the page are the same two colours rather than
+  a logo dropped onto someone else's scheme. Moss carries every accent the old
+  oxblood did; on the dark ground it lifts to the logo's lit leaf tone, because
+  a 30%-lightness green on espresso is a green nobody can see.
+
+  Deliberately avoided: navy + gold (funeral-home cliché), pale sage + cream (a
+  direct competitor — this moss is deep and grey enough to read as neither),
+  indigo gradients and pill badges (the AI-template tells).
   ─────────────────────────────────────────────────────────────────────────
 */
 
 :root {
-  --paper: 40 30% 95%;
-  --ink: 25 14% 13%;
-  --stamp: 358 46% 40%;
-  --rule: 214 14% 80%;
+  --paper: 40 40% 94%;   /* #F6F2EA */
+  --ink: 30 11% 15%;     /* #2A2622 */
+  --stamp: 96 18% 30%;   /* #4A5B3F */
+  --rule: 39 27% 81%;    /* #DCD3C2 — warm, so the ruled paper stops reading cold */
 
-  /* The dark ground glass sits on. Warm, never blue-black. */
-  --night: 24 16% 8%;
-  --night-raised: 24 12% 13%;
+  /* The dark ground glass sits on: espresso, and espresso taken down a step. */
+  --night: 30 12% 10%;
+  --night-raised: 30 11% 15%;
 
-  --background: 40 30% 95%;
-  --foreground: 25 14% 13%;
+  --background: 40 40% 94%;
+  --foreground: 30 11% 15%;
 
-  --card: 42 40% 98%;
-  --card-foreground: 25 14% 13%;
+  --card: 40 44% 97%;
+  --card-foreground: 30 11% 15%;
 
-  --popover: 42 40% 98%;
-  --popover-foreground: 25 14% 13%;
+  --popover: 40 44% 97%;
+  --popover-foreground: 30 11% 15%;
 
-  --primary: 358 46% 40%;
-  --primary-foreground: 42 40% 98%;
-  --clay: 358 46% 40%;
+  --primary: 96 18% 30%;
+  --primary-foreground: 40 44% 97%;
+  --clay: 96 18% 30%;
 
-  --secondary: 38 22% 91%;
-  --secondary-foreground: 25 14% 16%;
+  --secondary: 39 27% 88%;
+  --secondary-foreground: 30 11% 18%;
 
-  --muted: 38 20% 92%;
-  --muted-foreground: 28 8% 36%;
+  --muted: 39 24% 90%;
+  --muted-foreground: 30 9% 36%;
 
-  --accent: 358 30% 93%;
-  --accent-foreground: 358 40% 26%;
+  --accent: 96 22% 90%;
+  --accent-foreground: 96 24% 22%;
 
-  --border: 32 14% 84%;
-  --input: 32 14% 78%;
-  --ring: 358 46% 40%;
-  /* Reserved for a figure landing on its final value. */
-  --positive: 152 46% 30%;
+  --border: 39 24% 84%;
+  --input: 39 24% 74%;
+  --ring: 96 18% 30%;
+  /* Reserved for a figure landing on its final value. Deeper than --stamp so a
+     settled number sits below the structural accents rather than beside them. */
+  --positive: 96 22% 26%;
 
   --radius: 2px;
 
@@ -82,34 +90,36 @@
   inside one.
 */
 [data-surface="dark"] {
-  --background: 24 16% 8%;
-  --foreground: 40 28% 94%;
+  --background: 30 12% 10%;
+  --foreground: 40 36% 93%;
 
-  --card: 24 12% 13%;
-  --card-foreground: 40 28% 94%;
+  --card: 30 11% 15%;
+  --card-foreground: 40 36% 93%;
 
-  --popover: 24 12% 13%;
-  --popover-foreground: 40 28% 94%;
+  --popover: 30 11% 15%;
+  --popover-foreground: 40 36% 93%;
 
-  --primary: 8 62% 56%;
-  --primary-foreground: 24 16% 8%;
-  --clay: 8 62% 56%;
-  --stamp: 8 62% 56%;
+  /* Moss at 30% lightness disappears on espresso, so the accent lifts to the
+     lit tone already present in the logo's leaves rather than staying put. */
+  --primary: 94 26% 58%;
+  --primary-foreground: 30 12% 10%;
+  --clay: 94 26% 58%;
+  --stamp: 94 26% 58%;
 
-  --secondary: 24 10% 17%;
-  --secondary-foreground: 40 28% 94%;
+  --secondary: 30 10% 18%;
+  --secondary-foreground: 40 36% 93%;
 
-  --muted: 24 10% 16%;
-  --muted-foreground: 36 12% 66%;
+  --muted: 30 10% 17%;
+  --muted-foreground: 38 14% 68%;
 
-  --accent: 24 12% 18%;
-  --accent-foreground: 40 28% 94%;
+  --accent: 30 11% 20%;
+  --accent-foreground: 40 36% 93%;
 
   --border: 36 10% 26%;
   --input: 36 10% 30%;
-  --ring: 8 62% 56%;
-  --rule: 36 8% 30%;
-  --positive: 152 52% 56%;
+  --ring: 94 26% 58%;
+  --rule: 34 9% 28%;
+  --positive: 94 34% 64%;
 
   --glass-tint-a: 0.07;
   --glass-rim-a: 0.22;
@@ -319,11 +329,7 @@
      bright to bend, refraction has nothing to show. */
   .bleed {
     background:
-      radial-gradient(
-        60% 55% at 18% 8%,
-        hsl(var(--stamp) / 0.28),
-        transparent 62%
-      ),
-      radial-gradient(50% 45% at 88% 22%, hsl(36 70% 52% / 0.16), transparent 65%);
+      radial-gradient(60% 55% at 18% 8%, hsl(34 44% 52% / 0.20), transparent 62%),
+      radial-gradient(50% 45% at 88% 22%, hsl(40 52% 58% / 0.14), transparent 65%);
   }
 }

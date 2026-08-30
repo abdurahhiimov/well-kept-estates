@@ -1,5 +1,5 @@
+import Image from "next/image";
 import Link from "next/link";
-import { Wordmark } from "@/components/site/wordmark";
 import { business, contact, nav, serviceArea } from "@/lib/content";
 import { site } from "@/lib/site";
 
@@ -11,7 +11,17 @@ export function SiteFooter() {
     <footer data-surface="dark" className="border-t border-border bg-background">
       <div className="container grid gap-10 py-14 md:grid-cols-[1.4fr_1fr_1fr]">
         <div>
-          <Wordmark />
+          {/* Full badge here rather than the wordmark: at this size the
+              lettering is legible, and the cream arch on the dark ground reads
+              as a seal pressed at the end of a document — which is the whole
+              argument the site is making. */}
+          <Image
+            src="/logo-badge.png"
+            alt="Well Kept Estates"
+            width={440}
+            height={480}
+            className="h-32 w-auto"
+          />
           <p className="mt-4 max-w-xs font-display text-base leading-snug text-foreground/90">
             {business.motto}
           </p>

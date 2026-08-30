@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { Reveal } from "@/components/motion/reveal";
 import { RuleDraw, SectionLabel } from "@/components/motion/rule";
 import { founder } from "@/lib/content";
@@ -40,12 +41,24 @@ export function FounderNote() {
                 </p>
               </div>
             </Reveal>
-            <Reveal delay={0.1} className="mt-8 max-w-sm">
-              <RuleDraw accent />
-              <p className="pt-3 font-mono text-xs text-muted-foreground">
-                <span className="text-foreground">{signature}</span> · Well Kept
-                Estates, San Fernando Valley
-              </p>
+            {/* Still no portrait — the reasoning above holds. The mark is a
+                different thing: a seal at the foot of the note, next to the
+                signature, the way a stamp sits under a signed page. */}
+            <Reveal delay={0.1} className="mt-8 flex max-w-sm items-center gap-4">
+              <Image
+                src="/logo-emblem.png"
+                alt=""
+                width={560}
+                height={416}
+                className="h-14 w-auto shrink-0 opacity-90"
+              />
+              <div className="min-w-0 flex-1">
+                <RuleDraw accent />
+                <p className="pt-3 font-mono text-xs text-muted-foreground">
+                  <span className="text-foreground">{signature}</span> · Well
+                  Kept Estates, San Fernando Valley
+                </p>
+              </div>
             </Reveal>
           </div>
         </div>

@@ -1,3 +1,5 @@
+import { readFile } from "node:fs/promises";
+import { join } from "node:path";
 import { ImageResponse } from "next/og";
 import { commission, serviceArea } from "@/lib/content";
 
@@ -8,11 +10,17 @@ export const contentType = "image/png";
 
 /**
  * Generated at build time from the same numbers the page states, so the share
- * card can never quote a fee the site has stopped charging. Deliberately
- * typographic — there are no photographs of a completed sale yet, and a stock
- * image of someone else's living room would be worse than none.
+ * card can never quote a fee the site has stopped charging.
+ *
+ * The badge replaces the typeset "Well Kept / ESTATES" that used to sit here —
+ * it carries the name in its own lettering, so setting the words again beside
+ * it printed them twice. It's inlined as a data URI because `ImageResponse`
+ * resolves at build time and has no origin to fetch a relative path from.
  */
 export default async function Image() {
+  const badge = await readFile(join(process.cwd(), "public", "logo-badge.png"));
+  const badgeSrc = `data:image/png;base64,${badge.toString("base64")}`;
+
   return new ImageResponse(
     (
       <div
@@ -22,32 +30,21 @@ export default async function Image() {
           display: "flex",
           flexDirection: "column",
           justifyContent: "space-between",
-          background: "#17110d",
-          padding: "72px 80px",
-          color: "#f4efe7",
+          background: "#2A2622",
+          padding: "64px 80px",
+          color: "#F6F2EA",
           fontFamily: "serif",
         }}
       >
-        <div style={{ display: "flex", flexDirection: "column" }}>
-          <div style={{ fontSize: 44, fontWeight: 700, letterSpacing: "-0.02em" }}>
-            Well Kept
-          </div>
-          <div
-            style={{
-              fontSize: 18,
-              letterSpacing: "0.34em",
-              opacity: 0.55,
-              marginTop: 8,
-            }}
-          >
-            ESTATES
-          </div>
+        <div style={{ display: "flex" }}>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src={badgeSrc} width={150} height={164} alt="" />
         </div>
 
         <div
           style={{
             display: "flex",
-            fontSize: 66,
+            fontSize: 64,
             lineHeight: 1.15,
             letterSpacing: "-0.02em",
             maxWidth: 900,
@@ -61,15 +58,15 @@ export default async function Image() {
             display: "flex",
             justifyContent: "space-between",
             alignItems: "flex-end",
-            borderTop: "1px solid rgba(244,239,231,0.18)",
-            paddingTop: 28,
+            borderTop: "1px solid rgba(246,242,234,0.18)",
+            paddingTop: 26,
             fontSize: 22,
           }}
         >
           <div style={{ display: "flex", opacity: 0.75 }}>
             {serviceArea.core.slice(0, 4).join(" · ")}
           </div>
-          <div style={{ display: "flex", color: "#d9705f" }}>
+          <div style={{ display: "flex", color: "#90B078" }}>
             {commission.rateLabel} of gross · {commission.minimumLabel} minimum
           </div>
         </div>
