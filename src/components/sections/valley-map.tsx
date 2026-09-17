@@ -114,7 +114,7 @@ export function ValleyMap() {
         <img
           src="/valley-map.webp"
           srcSet="/valley-map.webp 2048w, /valley-map@2x.webp 4096w"
-          sizes="2048px"
+          sizes="(max-width: 639px) 942px, (max-width: 1023px) 1475px, 2048px"
           alt=""
           aria-hidden
           width={LAYER.w}

@@ -50,6 +50,7 @@ export function FounderNote() {
                 alt=""
                 width={560}
                 height={416}
+                sizes="75px"
                 className="h-14 w-auto shrink-0 opacity-90"
               />
               <div className="min-w-0 flex-1">

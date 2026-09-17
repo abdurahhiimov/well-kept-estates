@@ -62,6 +62,7 @@ export function SiteHeader() {
               width={1412}
               height={1050}
               priority
+              sizes="65px"
               className="h-10 w-auto md:h-12"
             />
             <Wordmark size="md" />

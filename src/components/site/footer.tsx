@@ -20,6 +20,7 @@ export function SiteFooter() {
             alt="Well Kept Estates"
             width={440}
             height={480}
+            sizes="117px"
             className="h-32 w-auto"
           />
           <p className="mt-4 max-w-xs font-display text-base leading-snug text-foreground/90">
