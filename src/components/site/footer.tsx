@@ -39,7 +39,7 @@ export function SiteFooter() {
             Pages
           </h3>
           <ul className="mt-4 space-y-2.5 text-sm">
-            {[...nav, { label: "About", href: "/about" }].map((item) => (
+            {[...nav, { label: "About", href: "/about" }, { label: "Privacy", href: "/privacy" }].map((item) => (
               <li key={item.href}>
                 <Link
                   href={item.href}

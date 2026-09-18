@@ -1,24 +1,79 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { Menu, X } from "lucide-react";
 import { Wordmark } from "@/components/site/wordmark";
 import { Button } from "@/components/ui/button";
 import { nav, cta } from "@/lib/content";
 
+const FOCUSABLE =
+  'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])';
+
 export function SiteHeader() {
   const [open, setOpen] = useState(false);
   const [hovered, setHovered] = useState<string | null>(null);
   const reduced = useReducedMotion();
+  const pathname = usePathname();
+
+  const toggleRef = useRef<HTMLButtonElement>(null);
+  const panelRef = useRef<HTMLDivElement>(null);
+
+  /* A route link ("/about") can be current; an in-page anchor ("/#pricing")
+     never is — there's no separate page to mark as active. */
+  const isCurrent = (href: string) =>
+    !href.includes("#") && href === pathname;
 
   useEffect(() => {
     document.body.style.overflow = open ? "hidden" : "";
     return () => {
       document.body.style.overflow = "";
     };
+  }, [open]);
+
+  /* Keyboard behaviour for the mobile panel: Escape closes it and returns
+     focus to the button that opened it, and Tab loops inside the panel
+     instead of escaping into content stacked behind it. Opening moves focus
+     onto the first link so a keyboard user isn't left stranded on a button
+     that just changed meaning. */
+  useEffect(() => {
+    if (!open) return;
+
+    const panel = panelRef.current;
+    const firstLink = panel?.querySelector<HTMLElement>(FOCUSABLE);
+    firstLink?.focus();
+
+    function onKeyDown(e: KeyboardEvent) {
+      if (e.key === "Escape") {
+        e.preventDefault();
+        setOpen(false);
+        toggleRef.current?.focus();
+        return;
+      }
+      if (e.key !== "Tab" || !panel) return;
+
+      const focusable = Array.from(
+        panel.querySelectorAll<HTMLElement>(FOCUSABLE),
+      );
+      if (focusable.length === 0) return;
+
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
+      }
+    }
+
+    document.addEventListener("keydown", onKeyDown);
+    return () => document.removeEventListener("keydown", onKeyDown);
   }, [open]);
 
   return (
@@ -78,7 +133,8 @@ export function SiteHeader() {
                   <Link
                     href={item.href}
                     onMouseEnter={() => setHovered(item.href)}
-                    className="relative block whitespace-nowrap px-5 py-1 font-mono text-[0.9rem] uppercase tracking-[0.05em] text-foreground/95 transition-colors duration-200 hover:text-foreground"
+                    aria-current={isCurrent(item.href) ? "page" : undefined}
+                    className="relative block whitespace-nowrap px-5 py-1 font-mono text-[0.9rem] uppercase tracking-[0.05em] text-foreground/95 transition-colors duration-200 hover:text-foreground aria-[current=page]:text-foreground"
                   >
                     {item.label}
                     {hovered === item.href && !reduced && (
@@ -108,10 +164,12 @@ export function SiteHeader() {
           </Link>
 
           <button
+            ref={toggleRef}
             type="button"
             className="inline-flex h-9 w-9 items-center justify-center text-foreground lg:hidden"
             aria-label={open ? "Close menu" : "Open menu"}
             aria-expanded={open}
+            aria-controls="mobile-nav"
             onClick={() => setOpen((v) => !v)}
           >
             {open ? <X className="size-6" /> : <Menu className="size-6" />}
@@ -122,6 +180,11 @@ export function SiteHeader() {
       <AnimatePresence>
         {open && (
           <motion.div
+            id="mobile-nav"
+            ref={panelRef}
+            role="dialog"
+            aria-modal="true"
+            aria-label="Site menu"
             initial={{ opacity: 0, y: -12 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -12 }}
@@ -140,6 +203,7 @@ export function SiteHeader() {
                     <Link
                       href={item.href}
                       onClick={() => setOpen(false)}
+                      aria-current={isCurrent(item.href) ? "page" : undefined}
                       className="block border-b border-white/10 py-4 font-mono text-sm uppercase tracking-[0.08em] text-foreground"
                     >
                       {item.label}
